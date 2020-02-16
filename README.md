@@ -18,6 +18,20 @@ XForwardy is a Host Header Injection scanning tool which can detect misconfigura
 * requests
 * validators
 
+### Installation
+
+```
+
+git clone https://github.com/roottusk/xforwardy
+
+pip install -r requirements.txt
+
+python xforwardy.py 
+
+```
+
+
+
 
 ### Support the Developer
 
