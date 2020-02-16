@@ -49,6 +49,7 @@ def process_file(url_file) :
 def custom_req(target_url) :
 	target_url=target_url+"/"
 	if validators.url(target_url) :
+		try :
 			response1=requests.get(target_url, headers=header1, allow_redirects=False)
 			response2=requests.get(target_url, headers=header2, allow_redirects=False)
 			response1_location=""
@@ -70,6 +71,8 @@ def custom_req(target_url) :
 			
 			if(response1_body.find(keyword) > -1  or response1_location.find(keyword) > -1 or response1.status_code==200 or response2_body.find(keyword) > -1 or response2_location.find(keyword) > -1) :
 				result_list.append(target_url)
+		except :
+			print("\nCan't reach "+target_url)
 	else :
 		print("\r"+"Malformed URL : "+target_url+"\r")
 	return
