@@ -22,7 +22,7 @@ XForwardy is a Host Header Injection scanning tool which can detect misconfigura
 
 ```
 
-git clone https://github.com/roottusk/xforwardy
+git clone https://github.com/roottusk/xforwardy.git
 
 pip install -r requirements.txt
 
