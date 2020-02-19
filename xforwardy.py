@@ -28,6 +28,12 @@ def is_redirect(status_code) :
 		return True
 	elif status_code == 302 :
 		return True
+	elif status_code == 303 :
+		return True
+	elif status_code == 307 :
+		return True
+	elif status_code == 308 :
+		return True
 	else :
 		return False
 
