@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+#Made with <3 by roottusk
 
 import requests
 import sys
