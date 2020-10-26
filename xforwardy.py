@@ -6,12 +6,6 @@ import sys
 import validators
 import os
 
-usage = "Usage : \n\nxfowardy.py <options> <arguements>\n \nOptions : \n -u \t:\t URL of the Website \n -i \t:\t Input file of the URLS\n"
-keyword = "xforwardy.com"
-result_list = list()
-header1 = {"Host": "xforwardy.com"}
-header2 = {"X-Forwarded-Host": "xforwardy.com"}
-
 print("""
         
        _  __    ____                                         __      
@@ -21,7 +15,15 @@ print("""
     /_/|_|  /_/   \____//_/     |__/|__/ \__,_//_/    \__,_/ \__, /  
                                                             /____/   
  """)
-													  
+
+usage = "Usage : \n\nxfowardy.py <options> <arguements>\n \nOptions : \n -u \t:\t URL of the Website \n -i \t:\t Input file of the URLS\n"
+keyword = "xforwardy.com"
+result_list = list()
+acao_result_list = list()
+header1 = {"Host": keyword}
+header2 = {"X-Forwarded-Host": keyword}
+header3 = {"Origin": keyword}
+												  
 
 def is_redirect(status_code) :
 	if status_code == 301 :
@@ -62,6 +64,7 @@ def custom_req(target_url) :
 			response1_location=""
 			response2_location=""
 			
+			
 			if is_redirect(response1.status_code) :
 				if len(response1.headers["Location"]) != 0 :	
 					response1_location=response1.headers["Location"]
@@ -74,7 +77,7 @@ def custom_req(target_url) :
 					response2_location=response2.headers["Location"]
 					
 			response2_body=response2.content
-			
+
 			
 			if(response1_body.find(keyword) > -1  or response1_location.find(keyword) > -1 or response1.status_code==200 or response2_body.find(keyword) > -1 or response2_location.find(keyword) > -1) :
 				result_list.append(target_url)
@@ -82,19 +85,47 @@ def custom_req(target_url) :
 			print("\nCan't reach "+target_url)
 	else :
 		print("\r"+"Malformed URL : "+target_url+"\r")
+		exit(1)
 	return
+
+def acao_check(target_url):
+	target_url=target_url+"/"
+	try:
+		response3=requests.get(target_url, headers=header3, allow_redirects=False)
+		response3_acao=""
+
+		if len(response3.headers["access-control-allow-origin"]) !=0 :
+			response3_acao=response3.headers["access-control-allow-origin"]
+		if len(response3.headers["Access-Control-Allow-Origin"]) !=0 :
+			response3_acao=response3.headers["Access-Control-Allow-Origin"]
+
+		if(response3_acao.find(keyword) > -1) :
+			acao_result_list.append(target_url)
+
+	except:
+		print("\nCan't reach "+target_url)
+
+	
+
 	
 if len(sys.argv) > 1 :
 	if sys.argv[1] == '-u' :
 		target_url=sys.argv[2]
-		print("\nTarget : "+target_url)
+		print("\nTarget : "+target_url+"\n")
 		custom_req(target_url)
-		
+		acao_check(target_url)
 		if len(result_list) == 0 :
 			print("\nNo Reflection of Custom Host at all !")
 		else :
 			print("\nPotential Host Header Injection at :")
 			for url in result_list :
+				print(url)
+		
+		if len(acao_result_list) == 0 :
+			print("\nNo CORS Misconfig I guess")
+		else :
+			print("\nOverly Permissive CORS Policy :")
+			for url in acao_result_list :
 				print(url)
 				
 	elif sys.argv[1] == '-i' :
