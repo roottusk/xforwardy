@@ -10,7 +10,7 @@ Host Header Injection Scanner
 
 ## Introduction
 
-XForwardy is a Host Header Injection scanning tool which can detect misconfigurations , where Host Header Injections are potentially possible. 
+XForwardy is a Host Header Injection scanning tool which can detect misconfigurations , where Host Header Injections are potentially possible. It also checks for CORS Misconfig in a URL.
 
 
 ### Requirements
