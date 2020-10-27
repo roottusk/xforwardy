@@ -23,6 +23,7 @@ acao_result_list = list()
 header1 = {"Host": keyword}
 header2 = {"X-Forwarded-Host": keyword}
 header3 = {"Origin": keyword}
+
 												  
 
 def is_redirect(status_code) :
@@ -40,11 +41,16 @@ def is_redirect(status_code) :
 		return False
 
 
+def process_req_file(url_file) :
+	print(1)
+	return
+
 def process_file(url_file) :
 	f = open(url_file,"r")
 	for line in f :
 		line = line.strip()
 		custom_req(line)
+		acao_check(line)
 		print("\r"+"Scanning : "+line)
 	f.close()
 	if len(result_list) == 0 :
@@ -52,6 +58,13 @@ def process_file(url_file) :
 	else :
 		print("\nPotential Host Header Injection at :\n")
 		for url in result_list :
+			print(url)
+	
+	if len(acao_result_list)== 0:
+		print("\nNo CORS Misconfig(s)")
+	else :
+		print("\nPossible CORS Misconfig at :\n")
+		for url in acao_result_list :
 			print(url)
 	return
 	
@@ -135,6 +148,8 @@ if len(sys.argv) > 1 :
 			process_file(url_file)
 		else:
 			print("\nNot a Valid File")
+	elif sys.argv[1] == '-r' :
+		print("\nParsing request from text file\n")
 	else :
 		print(sys.argv)
 		print(usage)
